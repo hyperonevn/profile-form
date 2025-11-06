@@ -38,8 +38,9 @@ const DomainChecker: React.FC<DomainCheckerProps> = ({
 
         const available = !data.exists;
         setIsAvailable(available);
-        onCheck?.(!available); // ✅ nếu domain đã tồn tại => true (để block upload)
-      } catch {
+        onCheck?.(data.exists); // ✅ callback: true nếu *đã tồn tại*, false nếu *khả dụng*
+      } catch (err) {
+        console.error("Lỗi kiểm tra subdomain:", err);
         setIsAvailable(null);
         onCheck?.(false);
       } finally {
@@ -114,6 +115,13 @@ const DomainChecker: React.FC<DomainCheckerProps> = ({
         className={`w-full py-3 px-4 rounded-md bg-white/5 text-white placeholder-white/40 
         focus:outline-none transition-all duration-300 border ${borderStyle}`}
       />
+
+      {/* Cảnh báo ngắn nếu nhập < 3 ký tự */}
+      {value && value.length < 3 && (
+        <p className="text-xs text-red-400 mt-1">
+          ⚠️ Tên miền phải có ít nhất 3 ký tự.
+        </p>
+      )}
     </div>
   );
 };

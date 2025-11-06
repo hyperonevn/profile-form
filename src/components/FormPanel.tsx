@@ -53,6 +53,16 @@ const FormPanel: React.FC<{
       return;
     }
 
+    if (subdomainTonTai) {
+      setThongBao("⚠️ Subdomain này đã tồn tại, vui lòng chọn tên khác.");
+      return;
+    }
+
+    if (emailTonTai) {
+      setThongBao("⚠️ Email này đã tồn tại, vui lòng dùng email khác.");
+      return;
+    }
+
     setDangGui(true);
     setThongBao(null);
 
@@ -107,16 +117,14 @@ const FormPanel: React.FC<{
         <DomainChecker
           value={profile.subdomain}
           onChange={(v) => updateProfile("subdomain", v)}
-          placeholder="nhatlinh"
-          onCheck={(exists) => setSubdomainTonTai(exists)}
+          onCheck={(exists) => setSubdomainTonTai(exists)} // ✅ callback đúng: true nếu domain đã tồn tại
         />
         {profile.subdomain && (
           <>
             <p className="text-xs text-gray-400 -mt-4 mb-1">
               🌐 Hồ sơ của bạn sẽ là:
             </p>
-            <p className="text-white/60 text-xs mb-3">🌐 Your profile link:</p>
-            <p className="text-xs text-[#d6b35a] font-medium">
+            <p className="text-xs text-[#d6b35a] font-medium mb-3">
               https://{profile.subdomain}.profile.io.vn
             </p>
           </>
@@ -148,7 +156,7 @@ const FormPanel: React.FC<{
             label="Chức danh / Vai trò"
             value={profile.position}
             onChange={(v) => updateProfile("position", v)}
-            placeholder="Nhà sáng lập, Nhà thiết kế..."
+            placeholder="Nhà sáng lập, Nhà Văn, Nhà thiết kế..."
             required
           />
           <p className="text-white/60 text-xs">Title / Role</p>
@@ -180,7 +188,7 @@ const FormPanel: React.FC<{
             label="Vai trò trong tổ chức"
             value={profile.companyRole}
             onChange={(v) => updateProfile("companyRole", v)}
-            placeholder="Giám đốc, Sinh viên, Giảng viên..."
+            placeholder="Giám đốc, Giảng viên..."
           />
           <p className="text-white/60 text-xs">Role within organization</p>
 
@@ -217,24 +225,14 @@ const FormPanel: React.FC<{
                 }`}
             />
             {emailTonTai === true && (
-              <>
-                <p className="text-xs text-red-400 mt-1">
-                  ⚠️ Email này đã tồn tại trong hệ thống.
-                </p>
-                <p className="text-white/60 text-xs mt-1">
-                  ⚠️ This email already exists in the system.
-                </p>
-              </>
+              <p className="text-xs text-red-400 mt-1">
+                ⚠️ Email này đã tồn tại trong hệ thống.
+              </p>
             )}
             {emailTonTai === false && (
-              <>
-                <p className="text-xs text-[#d6b35a] mt-1">
-                  ✅ Email này có thể sử dụng.
-                </p>
-                <p className="text-white/60 text-xs mt-1">
-                  ✅ This email can be used.
-                </p>
-              </>
+              <p className="text-xs text-[#d6b35a] mt-1">
+                ✅ Email này có thể sử dụng.
+              </p>
             )}
           </div>
 
