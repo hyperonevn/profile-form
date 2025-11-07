@@ -137,35 +137,44 @@ const FormPanel: React.FC<{
           subdomain={profile.subdomain}
           disabled={!profile.subdomain || subdomainTonTai}
         />
-        <p className="text-white/60 text-xs mt-1">
-          Upload your profile photo (disabled until domain available)
+        <p className="text-white/60 text-xs mt-2 leading-relaxed">
+          📸 <strong>Ảnh đang được tải lên, vui lòng kiên nhẫn đợi ảnh hiển thị rồi hãy nhấn “Tạo Hồ Sơ”.</strong>
+          <br />
+          <span className="text-white/40 italic">
+            * Your image is uploading — please wait until it appears before pressing “Create Profile”.
+          </span>
         </p>
 
         {/* 👤 Thông tin cá nhân */}
-        <div className="space-y-4">
+        <div className="space-y-4 mt-4">
           <InputField
             label="Họ và tên"
             value={profile.fullName}
             onChange={(v) => updateProfile("fullName", v)}
-            placeholder="Trương Nhật Linh"
+            placeholder="Lữ Minh Trí"
             required
           />
           <p className="text-white/60 text-xs">Full name</p>
 
           <InputField
-            label="Chức danh / Vai trò"
+            label="Chức danh / Vai trò / Danh xưng"
             value={profile.position}
             onChange={(v) => updateProfile("position", v)}
-            placeholder="Nhà sáng lập, Nhà Văn, Nhà thiết kế..."
+            placeholder="Founder, Speaker, Nhà sáng lập, Nhà sáng tạo nội dung..."
             required
           />
-          <p className="text-white/60 text-xs">Title / Role</p>
+          <p className="text-white/60 text-xs">
+            Title / Role / Designation – bạn có thể dùng danh xưng cá nhân, nghệ danh, hoặc phong cách riêng (không nhất thiết thuộc công ty).<br />
+            <span className="text-white/40 italic">
+              You may use personal titles or creative designations (not limited to company roles).
+            </span>
+          </p>
 
           <InputField
             label="Giới thiệu ngắn"
             value={profile.intro}
             onChange={(v) => updateProfile("intro", v)}
-            placeholder="Lan tỏa cảm hứng và kết nối con người qua công nghệ..."
+            placeholder="Nhà sáng lập HYPER ONE – hệ sinh thái AI dành cho doanh nhân Việt Nam."
             multiline
             required
           />
@@ -178,17 +187,17 @@ const FormPanel: React.FC<{
             label="Tổ chức / Công ty / Trường học"
             value={profile.companyName}
             onChange={(v) => updateProfile("companyName", v)}
-            placeholder="HYPER ONE, Đại học Quốc gia, v.v..."
+            placeholder="HYPER ONE COMPANY LIMITED"
           />
           <p className="text-white/60 text-xs">
             Organization / Company / School
           </p>
 
           <InputField
-            label="Vai trò trong tổ chức"
+            label="Vai trò trong tổ chức / Công ty / Trường học"
             value={profile.companyRole}
             onChange={(v) => updateProfile("companyRole", v)}
-            placeholder="Giám đốc, Giảng viên..."
+            placeholder="Giám đốc điều hành / Executive Officer"
           />
           <p className="text-white/60 text-xs">Role within organization</p>
 
@@ -196,7 +205,7 @@ const FormPanel: React.FC<{
             label="Địa chỉ / Khu vực"
             value={profile.address}
             onChange={(v) => updateProfile("address", v)}
-            placeholder="TP. Hồ Chí Minh / Hà Nội / Nhật Bản..."
+            placeholder="68 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh, Việt Nam"
           />
           <p className="text-white/60 text-xs">Address / Region</p>
         </div>
@@ -214,7 +223,7 @@ const FormPanel: React.FC<{
                 updateProfile("email", val);
                 kiemTraEmail(val);
               }}
-              placeholder="contact@nhatlinh.io.vn"
+              placeholder="contact@hyperonevn.com"
               className={`w-full py-3 px-4 rounded-md bg-white/5 text-white placeholder-white/40 
                 focus:outline-none transition-all duration-300 border ${
                   emailTonTai === null
@@ -240,7 +249,7 @@ const FormPanel: React.FC<{
             label="Số điện thoại"
             value={profile.phone}
             onChange={(v) => updateProfile("phone", v)}
-            placeholder="+84 123 456 789"
+            placeholder="+84 352 608 068"
             type="tel"
           />
           <p className="text-white/60 text-xs">Phone number</p>
@@ -249,7 +258,7 @@ const FormPanel: React.FC<{
             label="Khu vực sinh sống"
             value={profile.location}
             onChange={(v) => updateProfile("location", v)}
-            placeholder="Hà Nội / TP.HCM"
+            placeholder="TP. Hồ Chí Minh / Tokyo / Singapore"
           />
           <p className="text-white/60 text-xs">Living area</p>
         </div>
