@@ -6,7 +6,7 @@ import DomainChecker from "./DomainChecker";
 import SocialLinks from "./SocialLinks";
 import { SuccessScreen } from "./SuccessScreen";
 import { Profile } from "../types/Profile";
-import FormPolicySection from "./FormPolicySection";
+import FormPolicySection from "./FormPolicySection"; // ✅ import chính sách riêng
 
 const FormPanel: React.FC<{
   profile: Profile;
@@ -16,12 +16,12 @@ const FormPanel: React.FC<{
   const [thongBao, setThongBao] = useState<string | null>(null);
   const [emailTonTai, setEmailTonTai] = useState<boolean | null>(null);
   const [daDongY, setDaDongY] = useState(false);
-  const [socialError, setSocialError] = useState<boolean>(false);
+  const [socialError, setSocialError] = useState(false);
   const [successData, setSuccessData] = useState<{
     subdomain: string;
     socialsEmail: string;
   } | null>(null);
-  const [subdomainTonTai, setSubdomainTonTai] = useState<boolean>(false);
+  const [subdomainTonTai, setSubdomainTonTai] = useState(false);
 
   const updateProfile = (field: keyof Profile, value: any) =>
     setProfile((prev) => ({ ...prev, [field]: value }));
@@ -47,19 +47,19 @@ const FormPanel: React.FC<{
 
   // 🚀 Gửi dữ liệu tạo hồ sơ
   const taoHoSo = async () => {
-    // ✅ Kiểm tra mạng xã hội bắt buộc có link
+    // Kiểm tra liên kết mạng xã hội (bắt buộc)
     const links = profile.socialLinks || {};
-    const emptyLinks = Object.values(links).filter(
-      (v) => v && v.trim() === ""
-    ).length;
-    if (emptyLinks > 0) {
+    const missingLinks = Object.values(links).some(
+      (v) => !v || v.trim() === ""
+    );
+    if (missingLinks) {
       setSocialError(true);
-      setThongBao("⚠️ Vui lòng điền đầy đủ link mạng xã hội (không được bỏ trống).");
+      setThongBao("⚠️ Bạn phải nhập ít nhất 1 link mạng xã hội hợp lệ.");
       return;
     }
 
     if (!daDongY) {
-      setThongBao("⚠️ Vui lòng xác nhận rằng bạn đã đồng ý Chính sách bảo mật.");
+      setThongBao("⚠️ Vui lòng xác nhận rằng bạn đồng ý Chính sách bảo mật.");
       return;
     }
 
@@ -101,6 +101,7 @@ const FormPanel: React.FC<{
     }
   };
 
+  // ✅ Nếu đã tạo thành công → hiển thị SuccessScreen
   if (successData) {
     return (
       <SuccessScreen
@@ -115,9 +116,7 @@ const FormPanel: React.FC<{
       {/* 🧱 Header */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <h2 className="text-4xl font-bold mb-2">Tạo Hồ Sơ Cá Nhân</h2>
-        <p className="text-white/60 text-sm mb-6">
-          Create Your Personal Profile
-        </p>
+        <p className="text-white/60 text-sm mb-6">Create Your Personal Profile</p>
         <p className="text-white/70 mb-12 text-sm tracking-wide">
           HYPER ME – profile.io.vn
         </p>
@@ -132,9 +131,7 @@ const FormPanel: React.FC<{
         />
         {profile.subdomain && (
           <>
-            <p className="text-xs text-gray-400 -mt-4 mb-1">
-              🌐 Hồ sơ của bạn sẽ là:
-            </p>
+            <p className="text-xs text-gray-400 -mt-4 mb-1">🌐 Hồ sơ của bạn sẽ là:</p>
             <p className="text-xs text-[#d6b35a] font-medium mb-3">
               https://{profile.subdomain}.profile.io.vn
             </p>
@@ -149,11 +146,10 @@ const FormPanel: React.FC<{
           disabled={!profile.subdomain || subdomainTonTai}
         />
         <p className="text-white/60 text-xs mt-2 leading-relaxed">
-          📸 <strong>Ảnh đang được tải lên, vui lòng kiên nhẫn đợi ảnh hiển thị rồi hãy nhấn “Tạo Hồ Sơ”.</strong>
+          📸 <strong>Ảnh đang được tải lên, vui lòng đợi ảnh hiển thị rồi hãy nhấn “Tạo Hồ Sơ”.</strong>
           <br />
           <span className="text-white/40 italic">
-            * Your image is uploading — please wait until it appears before
-            pressing “Create Profile”.
+            * Your image is uploading — please wait until it appears before pressing “Create Profile”.
           </span>
         </p>
 
@@ -176,11 +172,9 @@ const FormPanel: React.FC<{
             required
           />
           <p className="text-white/60 text-xs">
-            Title / Role / Designation – bạn có thể dùng danh xưng cá nhân, nghệ
-            danh, hoặc phong cách riêng (không nhất thiết thuộc công ty).<br />
+            Title / Role / Designation – có thể dùng danh xưng cá nhân, nghệ danh, hoặc phong cách riêng.<br />
             <span className="text-white/40 italic">
-              You may use personal or creative designations (not limited to
-              company roles).
+              You may use personal or creative designations (not limited to company roles).
             </span>
           </p>
 
@@ -188,13 +182,12 @@ const FormPanel: React.FC<{
             label="Giới thiệu ngắn *"
             value={profile.intro}
             onChange={(v) => updateProfile("intro", v)}
-            placeholder="Kể về bản thân, sứ mệnh, hoặc điều truyền cảm hứng bạn muốn lan tỏa (giới hạn 250 ký tự)..."
+            placeholder="Giới thiệu ngắn gọn (≤250 ký tự) – kể về bản thân, sứ mệnh, hoặc cảm hứng sống..."
             multiline
             required
           />
           <p className="text-white/60 text-xs">
-            Short introduction – giới hạn ký tự, khuyến khích kể về bản thân và
-            truyền cảm hứng.
+            Short introduction – khuyến khích kể về bản thân và truyền cảm hứng.
           </p>
         </div>
 
@@ -212,10 +205,10 @@ const FormPanel: React.FC<{
             label="Vai trò trong tổ chức / Công ty / Trường học"
             value={profile.companyRole}
             onChange={(v) => updateProfile("companyRole", v)}
-            placeholder="Giám đốc điều hành / Giáo sư / Giảng viên / Kỹ sư / Executive Officer..."
+            placeholder="Giám đốc điều hành / Giáo sư / Giảng viên / Kỹ sư / Executive Officer"
           />
           <p className="text-white/60 text-xs">
-            Role within organization / Example: Professor, Lecturer, Engineer...
+            Role within organization – ví dụ: Professor, Lecturer, Engineer.
           </p>
 
           <InputField
@@ -293,11 +286,10 @@ const FormPanel: React.FC<{
             socialError ? "text-red-400" : "text-white/60"
           }`}
         >
-          🔗 Your social media links – bắt buộc có link hợp lệ.  
-          Hãy nhập **đuôi username** hoặc **đường dẫn đầy đủ**.  
-          <span className="italic text-white/40 block">
+          🔗 Bắt buộc nhập link mạng xã hội.  
+          <span className="text-white/40 italic">
             Example: instagram.com/<b>luminhtri</b> → nhập “luminhtri”.  
-            ⚠️ Bỏ trống sẽ báo lỗi và không thể tạo hồ sơ.
+            Nếu bỏ trống, sẽ báo lỗi đỏ và không thể tạo hồ sơ.
           </span>
         </p>
 
