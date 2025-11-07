@@ -111,7 +111,7 @@ const DomainChecker: React.FC<DomainCheckerProps> = ({
           setIsAvailable(null);
           onCheck?.(false); // ✅ reset khi user đang nhập
         }}
-        placeholder="nhatlinh"
+        placeholder="minhtri"
         className={`w-full py-3 px-4 rounded-md bg-white/5 text-white placeholder-white/40 
         focus:outline-none transition-all duration-300 border ${borderStyle}`}
       />
