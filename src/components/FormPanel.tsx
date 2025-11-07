@@ -6,7 +6,7 @@ import DomainChecker from "./DomainChecker";
 import SocialLinks from "./SocialLinks";
 import { SuccessScreen } from "./SuccessScreen";
 import { Profile } from "../types/Profile";
-import FormPolicySection from "./FormPolicySection"; // ✅ import chính sách riêng
+import FormPolicySection from "./FormPolicySection";
 
 const FormPanel: React.FC<{
   profile: Profile;
@@ -45,18 +45,25 @@ const FormPanel: React.FC<{
     }
   };
 
+  // 🚀 Kiểm tra lỗi link mạng xã hội
+  const validateSocialLinks = (links: Record<string, string>) => {
+    const invalid = Object.values(links).some(
+      (v) => v && (v.includes("http") || v.includes(".com"))
+    );
+    if (invalid) {
+      setSocialError(true);
+      setThongBao(
+        "⚠️ Không được nhập link trực tiếp! Vui lòng chỉ nhập đuôi username (ví dụ: luminhtri)."
+      );
+      return false;
+    }
+    return true;
+  };
+
   // 🚀 Gửi dữ liệu tạo hồ sơ
   const taoHoSo = async () => {
-    // Kiểm tra liên kết mạng xã hội (bắt buộc)
     const links = profile.socialLinks || {};
-    const missingLinks = Object.values(links).some(
-      (v) => !v || v.trim() === ""
-    );
-    if (missingLinks) {
-      setSocialError(true);
-      setThongBao("⚠️ Bạn phải nhập ít nhất 1 link mạng xã hội hợp lệ.");
-      return;
-    }
+    if (!validateSocialLinks(links)) return;
 
     if (!daDongY) {
       setThongBao("⚠️ Vui lòng xác nhận rằng bạn đồng ý Chính sách bảo mật.");
@@ -116,7 +123,9 @@ const FormPanel: React.FC<{
       {/* 🧱 Header */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <h2 className="text-4xl font-bold mb-2">Tạo Hồ Sơ Cá Nhân</h2>
-        <p className="text-white/60 text-sm mb-6">Create Your Personal Profile</p>
+        <p className="text-white/60 text-sm mb-6">
+          Create Your Personal Profile
+        </p>
         <p className="text-white/70 mb-12 text-sm tracking-wide">
           HYPER ME – profile.io.vn
         </p>
@@ -222,38 +231,17 @@ const FormPanel: React.FC<{
 
         {/* 📞 Liên hệ */}
         <div className="space-y-4">
-          <div>
-            <label className="block text-white/80 mb-1 text-sm">Email</label>
-            <p className="text-white/60 text-xs mb-2">Email address</p>
-            <input
-              type="email"
-              value={profile.email}
-              onChange={(e) => {
-                const val = e.target.value.trim();
-                updateProfile("email", val);
-                kiemTraEmail(val);
-              }}
-              placeholder="minhtri.lu@hyperonevn.com"
-              className={`w-full py-3 px-4 rounded-md bg-white/5 text-white placeholder-white/40 
-                focus:outline-none transition-all duration-300 border ${
-                  emailTonTai === null
-                    ? "border-white/20"
-                    : emailTonTai
-                    ? "border-red-400"
-                    : "border-[#d6b35a]"
-                }`}
-            />
-            {emailTonTai === true && (
-              <p className="text-xs text-red-400 mt-1">
-                ⚠️ Email này đã tồn tại trong hệ thống.
-              </p>
-            )}
-            {emailTonTai === false && (
-              <p className="text-xs text-[#d6b35a] mt-1">
-                ✅ Email này có thể sử dụng.
-              </p>
-            )}
-          </div>
+          <InputField
+            label="Email"
+            value={profile.email}
+            onChange={(v) => {
+              updateProfile("email", v);
+              kiemTraEmail(v);
+            }}
+            placeholder="minhtri.lu@hyperonevn.com"
+            required
+          />
+          <p className="text-white/60 text-xs">Email address</p>
 
           <InputField
             label="Số điện thoại"
@@ -286,17 +274,28 @@ const FormPanel: React.FC<{
             socialError ? "text-red-400" : "text-white/60"
           }`}
         >
-          🔗 Bắt buộc nhập link mạng xã hội.  
+          🔗 Bắt buộc nhập **đuôi username**, không được dùng link mạng xã hội trực tiếp.<br />
+          Example: instagram.com/<b>luminhtri</b> → nhập “luminhtri”.<br />
           <span className="text-white/40 italic">
-            Example: instagram.com/<b>luminhtri</b> → nhập “luminhtri”.  
-            Nếu bỏ trống, sẽ báo lỗi đỏ và không thể tạo hồ sơ.
+            Có thể bỏ trống nếu không dùng mạng xã hội — nếu để trống, icon mạng xã hội sẽ không hiển thị.<br />
+            ⚠️ Nếu nhập link (có “http” hoặc “.com”) → báo lỗi đỏ và không thể tạo hồ sơ.<br />
+            Hồ sơ nào dùng link đầy đủ sẽ bị cưỡng chế xóa khỏi hệ thống.
           </span>
         </p>
 
         {/* 🎨 Tông màu */}
         <div className="space-y-4">
           <label className="block text-white/80 mb-2 text-sm">
-            Chọn tông màu của hồ sơ (tham khảo hyperme.profile.io.vn)
+            Chọn tông màu của hồ sơ (
+            <a
+              href="https://hyperme.profile.io.vn"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#d6b35a] font-semibold animate-pulse hover:underline"
+            >
+              hyperme.profile.io.vn
+            </a>
+            )
           </label>
           <p className="text-white/60 text-xs mb-2">Choose profile theme</p>
           <div className="flex gap-4">
