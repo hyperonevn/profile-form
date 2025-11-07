@@ -274,19 +274,17 @@ const FormPanel: React.FC<{
             socialError ? "text-red-400" : "text-white/60"
           }`}
         >
-          🔗 Bắt buộc nhập **đuôi username**, không được dùng link mạng xã hội trực tiếp.<br />
-          Example: instagram.com/<b>luminhtri</b> → nhập “luminhtri”.<br />
+          
+      
           <span className="text-white/40 italic">
-            Có thể bỏ trống nếu không dùng mạng xã hội — nếu để trống, icon mạng xã hội sẽ không hiển thị.<br />
-            ⚠️ Nếu nhập link (có “http” hoặc “.com”) → báo lỗi đỏ và không thể tạo hồ sơ.<br />
-            Hồ sơ nào dùng link đầy đủ sẽ bị cưỡng chế xóa khỏi hệ thống.
+          
           </span>
         </p>
 
         {/* 🎨 Tông màu */}
         <div className="space-y-4">
           <label className="block text-white/80 mb-2 text-sm">
-            Chọn tông màu của hồ sơ (
+            Chọn tông màu của hồ sơ THAM KHẢO tại Digital Card Catalog (
             <a
               href="https://hyperme.profile.io.vn"
               target="_blank"
