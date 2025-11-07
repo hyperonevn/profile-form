@@ -191,7 +191,7 @@ const FormPanel: React.FC<{
             label="Giới thiệu ngắn *"
             value={profile.intro}
             onChange={(v) => updateProfile("intro", v)}
-            placeholder="Giới thiệu ngắn gọn (≤250 ký tự) – kể về bản thân, sứ mệnh, hoặc cảm hứng sống..."
+            placeholder="Giới thiệu ngắn gọn (≤250 ký tự) Không được nhập link – kể về bản thân, sứ mệnh, hoặc cảm hứng sống..."
             multiline
             required
           />
@@ -284,7 +284,7 @@ const FormPanel: React.FC<{
         {/* 🎨 Tông màu */}
         <div className="space-y-4">
           <label className="block text-white/80 mb-2 text-sm">
-            Chọn tông màu của hồ sơ THAM KHẢO tại Digital Card Catalog (
+            Chọn tông màu của hồ sơ - tham khảo tại Digital Card Catalog (
             <a
               href="https://hyperme.profile.io.vn"
               target="_blank"
